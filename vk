@@ -5,10 +5,10 @@ USE vk;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	id SERIAL primary key, -- BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
-    firstname VARCHAR(50),
+    firstname VARCHAR(50) COMMENT'Имя пользователя',
     lastname VARCHAR(50) COMMENT 'Фамилия пользователя',
     email VARCHAR(120) UNIQUE,
-    phone BIGINT,
+    phone BIGINT(11) UNIQUE,
     INDEX users_phone_idx(phone), 
     INDEX users_firstname_lastname_idx(firstname, lastname)
 );
@@ -16,7 +16,7 @@ CREATE TABLE users (
 DROP TABLE IF EXISTS `profiles`;
 CREATE TABLE `profiles` (
 	user_id SERIAL PRIMARY KEY,
-    gender CHAR(1),
+    gender ENUM('F', 'M'), -- только 2 варианта гендера
     birthday DATE,
 	photo_id BIGINT UNSIGNED NULL,
     created_at DATETIME DEFAULT NOW(),
@@ -55,16 +55,12 @@ CREATE TABLE friend_requests (
     FOREIGN KEY (target_user_id) REFERENCES users(id)
 );
 
-
 DROP TABLE IF EXISTS like_profiles;
 CREATE TABLE like_profiles (
 	id SERIAL primary key,
 	from_user_id BIGINT UNSIGNED NOT NULL,
 	to_user_id BIGINT UNSIGNED NOT NULL,
     like_profile CHAR(4) COMMENT 'like',
-    
     FOREIGN KEY (from_user_id) REFERENCES profiles(user_id),
     FOREIGN KEY (to_user_id) REFERENCES profiles(user_id)
     );
-    
-
